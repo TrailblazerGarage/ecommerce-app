@@ -1,3 +1,4 @@
+import 'package:ecommerceapp/src/blocks/provider.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -14,6 +15,9 @@ class LoginPage extends StatelessWidget {
   }
 
   Widget _loginForm(context) {
+
+    /// Search Provider on the the object context
+    final bloc = Provider.of(context);
 
     final size = MediaQuery.of(context).size;
 
@@ -47,9 +51,9 @@ class LoginPage extends StatelessWidget {
               children: <Widget>[
                 Text('LogIn', style: TextStyle(fontSize: 20.0)),
                 SizedBox( height: 60.0 ),
-                _createEmail(),
+                _createEmail( bloc ),
                 SizedBox( height: 30.0 ),
-                _createPassword(),
+                _createPassword( bloc ),
                 SizedBox( height: 10.0 ),
                 _createLoginButton()
               ],
@@ -63,7 +67,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _createPassword() {
+  Widget _createPassword(LoginBloc bloc) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 20.0),
 
@@ -77,18 +81,28 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _createEmail() {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 20.0),
+  Widget _createEmail(LoginBloc bloc) {
 
-      child: TextField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          icon: Icon(Icons.lock,color: Colors.deepPurple),
-          hintText: 'ejemplo@email.com',
-          labelText: 'Email',
-        ),
-      ),
+    return StreamBuilder(
+      stream: bloc.emailStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot){
+        return Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+
+          child: TextField(
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              icon: Icon(Icons.lock,color: Colors.deepPurple),
+              hintText: 'ejemplo@email.com',
+              labelText: 'Email',
+              counterText: snapshot.data,
+            ),
+            /// same as onChanged: bloc.changeEmail, send reference
+            /// so first argument will transport to the bloc.changeEmail first argument
+            onChanged: ( value ) => bloc.changeEmail(value),
+          ),
+        );
+      },
     );
   }
 
