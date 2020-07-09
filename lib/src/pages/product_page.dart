@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ecommerceapp/src/models/product_model.dart';
 import 'package:ecommerceapp/src/utils/utils.dart' as utils;
 
 class ProductPage extends StatefulWidget {
@@ -10,6 +11,8 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
 
   final formKey = GlobalKey<FormState>();
+
+  ProductModel product = new ProductModel();
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +40,7 @@ class _ProductPageState extends State<ProductPage> {
               children: <Widget>[
                 _addName(),
                 _addPrice(),
+                _setProductAvailability(),
                 _addConfirmButton()
               ]
             )
@@ -48,22 +52,37 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _addName() {
     return TextFormField(
+      initialValue: product.title,
       textCapitalization:TextCapitalization.sentences,
       decoration: InputDecoration(
         labelText: 'Product'
       ),
+      onSaved: (value) => product.title = value,
       validator: (value) {
         return (value.length < 3) ? 'Add product name' : null;
       },
     );
   }
 
+  Widget _setProductAvailability(){
+    return SwitchListTile(
+      value: product.available,
+      title: Text('Available'),
+      activeColor: Colors.deepPurple,
+      onChanged: (value) => setState(() {
+        product.available = value;
+      })
+    );
+  }
+
   Widget _addPrice(){
     return TextFormField(
+      initialValue: product.price.toString(),
       keyboardType: TextInputType.numberWithOptions(decimal: true),
       decoration: InputDecoration(
         labelText: 'Price'
       ),
+      onSaved: (value) => product.price = double.parse(value),
       validator: (value) {
         return (utils.isNumeric(value)) ? null : 'Only numbers accepted';
       },
@@ -86,7 +105,11 @@ class _ProductPageState extends State<ProductPage> {
   void _submit() {
     if(!formKey.currentState.validate()) return;
 
-    print('Data is correct');
+    formKey.currentState.save();
+
+    print( product.title);
+    print( product.price);
+    print( product.available);
   }
 
 }
