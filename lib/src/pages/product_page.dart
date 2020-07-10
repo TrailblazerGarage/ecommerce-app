@@ -1,4 +1,4 @@
-import 'package:ecommerceapp/src/providers/products_provider.dart';
+import 'package:ecommerceapp/src/services/products_service.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/src/models/product_model.dart';
 import 'package:ecommerceapp/src/utils/utils.dart' as utils;
@@ -12,7 +12,7 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
 
   final formKey = GlobalKey<FormState>();
-  final productProvider = new ProductProvider();
+  final productProvider = new ProductService();
 
   ProductModel product = new ProductModel();
 
