@@ -37,4 +37,11 @@ class ProductService {
     ///print( products[0].id);
     return products;
   }
+
+  Future<int> removeProduct( String id ) async {
+    final url = '$_baseUrl/products/$id.json';
+    final resp = await http.delete(url);
+
+    return 1;
+  }
 }

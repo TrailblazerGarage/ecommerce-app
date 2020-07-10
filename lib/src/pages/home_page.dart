@@ -53,13 +53,13 @@ class HomePage extends StatelessWidget {
           color: Colors.deepPurple
         ),
         onDismissed: ( direction ) {
-          // TODO Remove Product
+          productService.removeProduct(product.id);
         },
         child: ListTile(
             title: Text('${ product.title } - ${ product.price }'),
             subtitle: Text( product.id ),
             onTap: () => Navigator.pushNamed(context, 'product')
-        );
+        ),
     );
   }
 
