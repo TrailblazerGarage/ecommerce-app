@@ -38,6 +38,16 @@ class ProductService {
     return products;
   }
 
+  Future<bool> editProduct( ProductModel product ) async {
+    final url = '$_baseUrl/products/${product.id}.json';
+
+    final resp = await http.put( url, body: productModelToJson(product));
+    final decodedData = json.decode(resp.body);
+    print(decodedData);
+
+    return true;
+  }
+
   Future<int> removeProduct( String id ) async {
     final url = '$_baseUrl/products/$id.json';
     final resp = await http.delete(url);

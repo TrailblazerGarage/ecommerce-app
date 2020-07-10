@@ -12,14 +12,24 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
 
   final formKey = GlobalKey<FormState>();
-  final productProvider = new ProductService();
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final productService = new ProductService();
 
   ProductModel product = new ProductModel();
+  bool _saving = false;
 
   @override
   Widget build(BuildContext context) {
 
+    final ProductModel prodData = ModalRoute.of(context).settings.arguments;
+
+    /// Check if page context has product object on arguments
+    if ( prodData != null ){
+      product = prodData;
+    }
+
     return Scaffold(
+      key: scaffoldKey,
       appBar: AppBar(
         title: Text('Product'),
         actions: <Widget>[
@@ -100,7 +110,7 @@ class _ProductPageState extends State<ProductPage> {
       textColor: Colors.white,
       label: Text('Save'),
       icon: Icon( Icons.save ),
-      onPressed: _submit,
+      onPressed: ( _saving ) ? null : _submit,
     );
   }
 
@@ -109,10 +119,32 @@ class _ProductPageState extends State<ProductPage> {
 
     formKey.currentState.save();
 
-    print( product.title);
-    print( product.price);
-    print( product.available);
+    setState(() { _saving = true; });
 
-    productProvider.addProduct(product);
+    ///print( product.title);
+    ///print( product.price);
+    ///print( product.available);
+
+    /// Check if we're adding a new product which still has no ID
+    /// Firebase is in charge of generate it
+    if ( product.id == null ) {
+      productService.addProduct(product);
+    } else {
+      productService.editProduct(product);
+    }
+
+    showNotificationBottomSnackBar('Product saved!');
+
+    // Take user to last page or home page
+    Navigator.pop(context);
+  }
+
+  void showNotificationBottomSnackBar(String message) {
+    final snackbar = SnackBar(
+      content: Text(message),
+      duration: Duration( milliseconds: 1500),
+    );
+
+    scaffoldKey.currentState.showSnackBar(snackbar);
   }
 }
