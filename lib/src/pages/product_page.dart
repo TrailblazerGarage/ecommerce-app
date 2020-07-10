@@ -2,6 +2,7 @@ import 'package:ecommerceapp/src/services/products_service.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/src/models/product_model.dart';
 import 'package:ecommerceapp/src/utils/utils.dart' as utils;
+import 'package:image_picker/image_picker.dart';
 
 class ProductPage extends StatefulWidget {
 
@@ -11,9 +12,12 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
 
+  PickedFile _pickedImage;
+  dynamic _pickedImageError;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final productService = new ProductService();
+  final ImagePicker _picker = ImagePicker();
 
   ProductModel product = new ProductModel();
   bool _saving = false;
@@ -35,11 +39,11 @@ class _ProductPageState extends State<ProductPage> {
         actions: <Widget>[
           IconButton(
             icon: Icon( Icons.photo_size_select_actual ),
-            onPressed: () {},
+            onPressed: _selectImageFromGallery,
           ),
           IconButton(
             icon: Icon( Icons.camera_alt ),
-            onPressed: () {},
+            onPressed: _takeImageFromCamera,
           )
         ]
       ),
@@ -50,6 +54,7 @@ class _ProductPageState extends State<ProductPage> {
             key: formKey,
             child: Column(
               children: <Widget>[
+                _showImage(),
                 _addName(),
                 _addPrice(),
                 _setProductAvailability(),
@@ -147,4 +152,48 @@ class _ProductPageState extends State<ProductPage> {
 
     scaffoldKey.currentState.showSnackBar(snackbar);
   }
+
+
+  Widget _showImage() {
+    if( product.photoUrl != null ) {
+      return Container();
+    } else {
+      return Image(
+          image: AssetImage(_pickedImage?.path ?? 'assets/no-image.png'),
+          height: 300.0,
+          fit: BoxFit.cover
+      );
+    }
+
+  }
+
+  _selectImageFromGallery() async {
+    _processImage(ImageSource.gallery);
+  }
+
+  _takeImageFromCamera() async {
+    _processImage(ImageSource.camera);
+  }
+
+  _processImage(ImageSource source) async {
+    try{
+      final pickedImage = await _picker.getImage(
+          source: source
+      );
+
+      if ( pickedImage != null ){
+
+      }
+
+      setState(() {
+        _pickedImage = pickedImage;
+      });
+
+    } catch (e) {
+      setState(() {
+        _pickedImageError = e;
+      });
+    }
+  }
+
 }
