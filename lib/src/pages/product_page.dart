@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:ecommerceapp/src/services/products_service.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/src/models/product_model.dart';
@@ -119,12 +121,17 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
-  void _submit() {
+  void _submit() async {
+
     if(!formKey.currentState.validate()) return;
 
     formKey.currentState.save();
 
     setState(() { _saving = true; });
+
+    if( _pickedImage != null ) {
+      product.photoUrl = await productService.uploadImage(_pickedImage);
+    }
 
     ///print( product.title);
     ///print( product.price);
@@ -156,7 +163,12 @@ class _ProductPageState extends State<ProductPage> {
 
   Widget _showImage() {
     if( product.photoUrl != null ) {
-      return Container();
+      return FadeInImage(
+        image: NetworkImage( product.photoUrl ),
+        placeholder: AssetImage('assets/jar-loading.gif'),
+        height: 300.0,
+        fit: BoxFit.contain,
+      );
     } else {
       return Image(
           image: AssetImage(_pickedImage?.path ?? 'assets/no-image.png'),
@@ -176,24 +188,17 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   _processImage(ImageSource source) async {
-    try{
       final pickedImage = await _picker.getImage(
           source: source
       );
 
       if ( pickedImage != null ){
-
+        product.photoUrl = null;
       }
 
       setState(() {
         _pickedImage = pickedImage;
       });
-
-    } catch (e) {
-      setState(() {
-        _pickedImageError = e;
-      });
-    }
   }
 
 }
