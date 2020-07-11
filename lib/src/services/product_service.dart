@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:ecommerceapp/src/preferences/user_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:ecommerceapp/src/models/product_model.dart';
@@ -11,6 +12,7 @@ class ProductService {
 
   /// Firebase REST API https://firebase.google.com/docs/reference/rest/database
   final String _baseUrl = 'https://flutter9dapps.firebaseio.com';
+  final _prefs = new UserPreferences();
 
   Future<bool> addProduct( ProductModel product) async {
     final url = '$_baseUrl/products.json';
@@ -20,7 +22,7 @@ class ProductService {
   }
 
   Future<List<ProductModel>> getAllProducts() async {
-    final url = '$_baseUrl/products.json';
+    final url = '$_baseUrl/products.json?auth${ _prefs.token }';
     final resp = await http.get(url);
 
     /// Firebase REST  API returns a Map<String, Map<String, dynamic>>
@@ -43,7 +45,7 @@ class ProductService {
   }
 
   Future<bool> editProduct( ProductModel product ) async {
-    final url = '$_baseUrl/products/${product.id}.json';
+    final url = '$_baseUrl/products/${product.id}.json?auth${ _prefs.token }';
 
     final resp = await http.put( url, body: productModelToJson(product));
     final decodedData = json.decode(resp.body);
@@ -53,7 +55,7 @@ class ProductService {
   }
 
   Future<int> removeProduct( String id ) async {
-    final url = '$_baseUrl/products/$id.json';
+    final url = '$_baseUrl/products/$id.json?auth${ _prefs.token }';
     final resp = await http.delete(url);
 
     return 1;
