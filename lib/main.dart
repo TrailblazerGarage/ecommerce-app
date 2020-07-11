@@ -1,4 +1,4 @@
-import 'package:ecommerceapp/src/blocks/provider.dart';
+import 'package:ecommerceapp/src/bloc/provider.dart';
 import 'package:ecommerceapp/src/pages/home_page.dart';
 import 'package:ecommerceapp/src/pages/login_page.dart';
 import 'package:ecommerceapp/src/pages/product_page.dart';

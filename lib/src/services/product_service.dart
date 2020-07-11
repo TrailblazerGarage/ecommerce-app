@@ -11,6 +11,7 @@ import 'dart:io';
 class ProductService {
 
   /// Firebase REST API https://firebase.google.com/docs/reference/rest/database
+  /// TODO extract to constant files
   final String _baseUrl = 'https://flutter9dapps.firebaseio.com';
   final _prefs = new UserPreferences();
 
@@ -30,7 +31,9 @@ class ProductService {
 
     final List<ProductModel> products = new List();
 
-    if (decodedData == null ) return [];
+    if ( decodedData == null ) return [];
+
+    if ( decodedData['error'] != null ) return [];
     
     decodedData.forEach(( id, prod ) {
       final prodTemp = ProductModel.fromJson(prod);
@@ -45,6 +48,7 @@ class ProductService {
   }
 
   Future<bool> editProduct( ProductModel product ) async {
+    /// TODO extract to constant files
     final url = '$_baseUrl/products/${product.id}.json?auth${ _prefs.token }';
 
     final resp = await http.put( url, body: productModelToJson(product));
@@ -62,6 +66,7 @@ class ProductService {
   }
 
   Future<String> uploadImage(PickedFile image) async {
+    ///TODO Extract url for constants file
     final url = Uri.parse('https://api.cloudinary.com/v1_1/dsk6auln9/image/upload?upload_preset=hj2ad9ki');
     final mimeType = mime(image.path).split('/'); /// image/jpg,png
     final imageUploadRequest = http.MultipartRequest(

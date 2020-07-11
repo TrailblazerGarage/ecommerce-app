@@ -1,7 +1,7 @@
+import 'package:ecommerceapp/src/bloc/provider.dart';
 import 'package:ecommerceapp/src/models/product_model.dart';
 import 'package:ecommerceapp/src/services/product_service.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerceapp/src/blocks/provider.dart';
 
 class HomePage extends StatelessWidget {
 
@@ -10,13 +10,14 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    final bloc = Provider.of(context);
+    final productsBloc = Provider.productsBloc(context);
+    productsBloc.loadProducts();
 
     return Scaffold(
       appBar: AppBar(
         title: Text('Home')
       ),
-      body: _showProductList(),
+      body: _showProductList(productsBloc),
       floatingActionButton: _createButton(context),
     );
   }
@@ -29,15 +30,16 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _showProductList() {
-    return FutureBuilder(
-      future: productService.getAllProducts(),
+  Widget _showProductList(ProductsBloc productsBloc) {
+
+    return StreamBuilder(
+      stream: productsBloc.productsStream,
       builder: (BuildContext context, AsyncSnapshot<List<ProductModel>> snapshot) {
         if ( snapshot.hasData ) {
           final products = snapshot.data;
           return ListView.builder(
             itemCount: products.length,
-            itemBuilder: (context, i) => _createItem( context, products[i] ),
+            itemBuilder: (context, i) => _createItem( context, productsBloc, products[i] ),
           );
         } else {
           return Center ( child: CircularProgressIndicator());
@@ -46,15 +48,14 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _createItem(BuildContext context, ProductModel product ) {
+  /// Draw individual widget of product item inside the ProductList
+  Widget _createItem(BuildContext context, ProductsBloc productsBloc, ProductModel product ) {
     return Dismissible(
         key: UniqueKey(),
         background: Container(
           color: Colors.deepPurple
         ),
-        onDismissed: ( direction ) {
-          productService.removeProduct(product.id);
-        },
+        onDismissed: ( direction ) => productsBloc.removeProducts(product.id),
         child: Card(
           child: Column(
             children: <Widget>[
