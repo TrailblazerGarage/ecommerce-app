@@ -2,7 +2,7 @@ import 'package:ecommerceapp/src/blocks/provider.dart';
 import 'package:ecommerceapp/src/services/user_service.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatelessWidget {
+class RegisterPage extends StatelessWidget {
 
   final userService = new UserService();
 
@@ -12,13 +12,13 @@ class LoginPage extends StatelessWidget {
       body: Stack(
         children: <Widget>[
           _createBackground(context),
-          _loginForm(context),
+          _registerForm(context),
         ],
       )
     );
   }
 
-  Widget _loginForm(context) {
+  Widget _registerForm(context) {
 
     /// Search Provider on the the object context
     final bloc = Provider.of(context);
@@ -53,19 +53,19 @@ class LoginPage extends StatelessWidget {
             ),
             child: Column(
               children: <Widget>[
-                Text('LogIn', style: TextStyle(fontSize: 20.0)),
+                Text('Sign Up', style: TextStyle(fontSize: 20.0)),
                 SizedBox( height: 60.0 ),
                 _createEmail( bloc ),
                 SizedBox( height: 30.0 ),
                 _createPassword( bloc ),
                 SizedBox( height: 10.0 ),
-                _createLoginButton( bloc )
+                _createRegisterButton( bloc )
               ],
             ),
           ),
 
           FlatButton(
-            child: Text('Sign Up'),
+            child: Text('Log In'),
             onPressed: () => Navigator.pushReplacementNamed(context, 'register'),
           ),
           SizedBox( height: 100.0 )
@@ -120,7 +120,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _createLoginButton(LoginBloc bloc) {
+  Widget _createRegisterButton(LoginBloc bloc) {
 
     return StreamBuilder(
       stream: bloc.formValidStream,
@@ -128,7 +128,7 @@ class LoginPage extends StatelessWidget {
         return RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 80.0, vertical: 15.0),
-            child: Text('LogIn'),
+            child: Text('Confirm'),
           ),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(5.0)
@@ -136,15 +136,16 @@ class LoginPage extends StatelessWidget {
           elevation: 0.0,
           color: Colors.deepPurple,
           textColor: Colors.white,
-          onPressed: snapshot.hasData ? () => _login(bloc, context) : null,
+          onPressed: snapshot.hasData ? () => _register(bloc, context) : null,
         );
       }
     );
   }
 
-  _login(LoginBloc bloc, BuildContext context) {
-    userService.login(bloc.email, bloc.password);
-    ///Navigator.pushReplacementNamed(context, 'home');
+  _register(LoginBloc bloc, BuildContext context) {
+    
+    userService.newUser(bloc.email, bloc.password);
+    //Navigator.pushReplacementNamed(context, 'home');
   }
 
   Widget _createBackground(BuildContext context) {

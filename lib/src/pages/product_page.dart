@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:ecommerceapp/src/services/products_service.dart';
+import 'package:ecommerceapp/src/services/product_service.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/src/models/product_model.dart';
 import 'package:ecommerceapp/src/utils/utils.dart' as utils;
