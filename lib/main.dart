@@ -3,13 +3,24 @@ import 'package:ecommerceapp/src/pages/home_page.dart';
 import 'package:ecommerceapp/src/pages/login_page.dart';
 import 'package:ecommerceapp/src/pages/product_page.dart';
 import 'package:ecommerceapp/src/pages/register_page.dart';
+import 'package:ecommerceapp/src/preferences/user_preferences.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(MyApp());
+void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = new UserPreferences();
+  await prefs.initPrefs();
+
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+
+    final prefs = new UserPreferences();
 
     return Provider(
       child: MaterialApp(

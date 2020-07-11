@@ -1,5 +1,6 @@
 import 'package:ecommerceapp/src/blocks/provider.dart';
 import 'package:ecommerceapp/src/services/user_service.dart';
+import 'package:ecommerceapp/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {
@@ -142,9 +143,13 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  _login(LoginBloc bloc, BuildContext context) {
-    userService.login(bloc.email, bloc.password);
-    ///Navigator.pushReplacementNamed(context, 'home');
+  _login(LoginBloc bloc, BuildContext context) async {
+    Map info = await userService.login(bloc.email, bloc.password);
+    if ( info['ok'] ) {
+      Navigator.pushReplacementNamed(context, 'home');
+    } else {
+      showAlert(context, info['message']);
+    }
   }
 
   Widget _createBackground(BuildContext context) {

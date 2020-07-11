@@ -1,5 +1,6 @@
 import 'package:ecommerceapp/src/blocks/provider.dart';
 import 'package:ecommerceapp/src/services/user_service.dart';
+import 'package:ecommerceapp/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class RegisterPage extends StatelessWidget {
@@ -66,7 +67,7 @@ class RegisterPage extends StatelessWidget {
 
           FlatButton(
             child: Text('Log In'),
-            onPressed: () => Navigator.pushReplacementNamed(context, 'register'),
+            onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
           ),
           SizedBox( height: 100.0 )
         ]
@@ -142,10 +143,13 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  _register(LoginBloc bloc, BuildContext context) {
-    
-    userService.newUser(bloc.email, bloc.password);
-    //Navigator.pushReplacementNamed(context, 'home');
+  _register(LoginBloc bloc, BuildContext context) async {
+    Map info = await userService.newUser(bloc.email, bloc.password);
+    if ( info['ok'] ) {
+      Navigator.pushReplacementNamed(context, 'home');
+    } else {
+      showAlert(context, info['message']);
+    }
   }
 
   Widget _createBackground(BuildContext context) {
