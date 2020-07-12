@@ -1,6 +1,4 @@
-import 'dart:io';
-
-import 'package:ecommerceapp/src/services/product_service.dart';
+import 'package:ecommerceapp/src/bloc/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerceapp/src/models/product_model.dart';
 import 'package:ecommerceapp/src/utils/utils.dart' as utils;
@@ -18,14 +16,16 @@ class _ProductPageState extends State<ProductPage> {
   dynamic _pickedImageError;
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final productService = new ProductService();
   final ImagePicker _picker = ImagePicker();
 
+  ProductsBloc productsBloc;
   ProductModel product = new ProductModel();
   bool _saving = false;
 
   @override
   Widget build(BuildContext context) {
+
+    productsBloc = Provider.productsBloc(context);
 
     final ProductModel prodData = ModalRoute.of(context).settings.arguments;
 
@@ -130,7 +130,7 @@ class _ProductPageState extends State<ProductPage> {
     setState(() { _saving = true; });
 
     if( _pickedImage != null ) {
-      product.photoUrl = await productService.uploadImage(_pickedImage);
+      product.photoUrl = await productsBloc.uploadProductImage(_pickedImage);
     }
 
     ///print( product.title);
@@ -140,9 +140,9 @@ class _ProductPageState extends State<ProductPage> {
     /// Check if we're adding a new product which still has no ID
     /// Firebase is in charge of generate it
     if ( product.id == null ) {
-      productService.addProduct(product);
+      productsBloc.addProducts(product);
     } else {
-      productService.editProduct(product);
+      productsBloc.editProducts(product);
     }
 
     showNotificationBottomSnackBar('Product saved!');
@@ -189,7 +189,9 @@ class _ProductPageState extends State<ProductPage> {
 
   _processImage(ImageSource source) async {
       final pickedImage = await _picker.getImage(
-          source: source
+          source: source,
+          maxWidth: 800,
+          maxHeight: 600
       );
 
       if ( pickedImage != null ){

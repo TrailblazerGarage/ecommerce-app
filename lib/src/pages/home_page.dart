@@ -1,11 +1,8 @@
 import 'package:ecommerceapp/src/bloc/provider.dart';
 import 'package:ecommerceapp/src/models/product_model.dart';
-import 'package:ecommerceapp/src/services/product_service.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
-
-  final productService = new ProductService();
 
   @override
   Widget build(BuildContext context) {
