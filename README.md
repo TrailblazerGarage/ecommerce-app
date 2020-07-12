@@ -33,7 +33,7 @@ Firebase
 ### Would you like to extend this app?
 This app has many resources and took many hours of work to build all of it, so you can hopefully start your next project on top of it and save all these precious hours and just focus on details and add new features.
 
-Please [buy me a coffee, U$D 5 a good one :-) via [paypal.me/trailblazersgarage](paypal.me/trailblazersgarage) and let's coordinate a call on Zoom/Skype or Google Hangout.
+Please buy me a coffee, U$D 5 a good one :-) via [https://www.paypal.me/trailblazersgarage](paypal.me/trailblazersgarage) and let's coordinate a call on Zoom/Skype or Google Hangout.
 
 You also can contact on trailblazersgarage@gmail.com.
 
