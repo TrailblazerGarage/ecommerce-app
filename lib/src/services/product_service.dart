@@ -23,7 +23,7 @@ class ProductService {
   }
 
   Future<List<ProductModel>> getAllProducts() async {
-    final url = '$_baseUrl/products.json?auth${ _prefs.token }';
+    final url = '$_baseUrl/products.json?auth=${ _prefs.token }';
     final resp = await http.get(url);
 
     /// Firebase REST  API returns a Map<String, Map<String, dynamic>>
@@ -49,7 +49,7 @@ class ProductService {
 
   Future<bool> editProduct( ProductModel product ) async {
     /// TODO extract to constant files
-    final url = '$_baseUrl/products/${product.id}.json?auth${ _prefs.token }';
+    final url = '$_baseUrl/products/${product.id}.json?auth=${ _prefs.token }';
 
     final resp = await http.put( url, body: productModelToJson(product));
     final decodedData = json.decode(resp.body);
