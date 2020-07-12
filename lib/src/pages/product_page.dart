@@ -5,13 +5,11 @@ import 'package:ecommerceapp/src/utils/utils.dart' as utils;
 import 'package:image_picker/image_picker.dart';
 
 class ProductPage extends StatefulWidget {
-
   @override
   _ProductPageState createState() => _ProductPageState();
 }
 
 class _ProductPageState extends State<ProductPage> {
-
   PickedFile _pickedImage;
   dynamic _pickedImageError;
   final formKey = GlobalKey<FormState>();
@@ -24,58 +22,47 @@ class _ProductPageState extends State<ProductPage> {
 
   @override
   Widget build(BuildContext context) {
-
     productsBloc = Provider.productsBloc(context);
 
     final ProductModel prodData = ModalRoute.of(context).settings.arguments;
 
     /// Check if page context has product object on arguments
-    if ( prodData != null ){
+    if (prodData != null) {
       product = prodData;
     }
 
     return Scaffold(
-      key: scaffoldKey,
-      appBar: AppBar(
-        title: Text('Product'),
-        actions: <Widget>[
+        key: scaffoldKey,
+        appBar: AppBar(title: Text('Product'), actions: <Widget>[
           IconButton(
-            icon: Icon( Icons.photo_size_select_actual ),
+            icon: Icon(Icons.photo_size_select_actual),
             onPressed: _selectImageFromGallery,
           ),
           IconButton(
-            icon: Icon( Icons.camera_alt ),
+            icon: Icon(Icons.camera_alt),
             onPressed: _takeImageFromCamera,
           )
-        ]
-      ),
-      body: SingleChildScrollView(
-        child: Container(
+        ]),
+        body: SingleChildScrollView(
+            child: Container(
           padding: EdgeInsets.all(15.0),
           child: Form(
-            key: formKey,
-            child: Column(
-              children: <Widget>[
+              key: formKey,
+              child: Column(children: <Widget>[
                 _showImage(),
                 _addName(),
                 _addPrice(),
                 _setProductAvailability(),
                 _addConfirmButton()
-              ]
-            )
-          ),
-        )
-      )
-    );
+              ])),
+        )));
   }
 
   Widget _addName() {
     return TextFormField(
       initialValue: product.title,
-      textCapitalization:TextCapitalization.sentences,
-      decoration: InputDecoration(
-        labelText: 'Product'
-      ),
+      textCapitalization: TextCapitalization.sentences,
+      decoration: InputDecoration(labelText: 'Product'),
       onSaved: (value) => product.title = value,
       validator: (value) {
         return (value.length < 3) ? 'Add product name' : null;
@@ -83,24 +70,21 @@ class _ProductPageState extends State<ProductPage> {
     );
   }
 
-  Widget _setProductAvailability(){
+  Widget _setProductAvailability() {
     return SwitchListTile(
-      value: product.available,
-      title: Text('Available'),
-      activeColor: Colors.deepPurple,
-      onChanged: (value) => setState(() {
-        product.available = value;
-      })
-    );
+        value: product.available,
+        title: Text('Available'),
+        activeColor: Colors.deepPurple,
+        onChanged: (value) => setState(() {
+              product.available = value;
+            }));
   }
 
-  Widget _addPrice(){
+  Widget _addPrice() {
     return TextFormField(
       initialValue: product.price.toString(),
       keyboardType: TextInputType.numberWithOptions(decimal: true),
-      decoration: InputDecoration(
-        labelText: 'Price'
-      ),
+      decoration: InputDecoration(labelText: 'Price'),
       onSaved: (value) => product.price = double.parse(value),
       validator: (value) {
         return (utils.isNumeric(value)) ? null : 'Only numbers accepted';
@@ -116,20 +100,21 @@ class _ProductPageState extends State<ProductPage> {
       color: Colors.deepPurple,
       textColor: Colors.white,
       label: Text('Save'),
-      icon: Icon( Icons.save ),
-      onPressed: ( _saving ) ? null : _submit,
+      icon: Icon(Icons.save),
+      onPressed: (_saving) ? null : _submit,
     );
   }
 
   void _submit() async {
-
-    if(!formKey.currentState.validate()) return;
+    if (!formKey.currentState.validate()) return;
 
     formKey.currentState.save();
 
-    setState(() { _saving = true; });
+    setState(() {
+      _saving = true;
+    });
 
-    if( _pickedImage != null ) {
+    if (_pickedImage != null) {
       product.photoUrl = await productsBloc.uploadProductImage(_pickedImage);
     }
 
@@ -139,7 +124,7 @@ class _ProductPageState extends State<ProductPage> {
 
     /// Check if we're adding a new product which still has no ID
     /// Firebase is in charge of generate it
-    if ( product.id == null ) {
+    if (product.id == null) {
       productsBloc.addProducts(product);
     } else {
       productsBloc.editProducts(product);
@@ -154,17 +139,16 @@ class _ProductPageState extends State<ProductPage> {
   void showNotificationBottomSnackBar(String message) {
     final snackbar = SnackBar(
       content: Text(message),
-      duration: Duration( milliseconds: 1500),
+      duration: Duration(milliseconds: 1500),
     );
 
     scaffoldKey.currentState.showSnackBar(snackbar);
   }
 
-
   Widget _showImage() {
-    if( product.photoUrl != null ) {
+    if (product.photoUrl != null) {
       return FadeInImage(
-        image: NetworkImage( product.photoUrl ),
+        image: NetworkImage(product.photoUrl),
         placeholder: AssetImage('assets/jar-loading.gif'),
         height: 300.0,
         fit: BoxFit.contain,
@@ -173,10 +157,8 @@ class _ProductPageState extends State<ProductPage> {
       return Image(
           image: AssetImage(_pickedImage?.path ?? 'assets/no-image.png'),
           height: 300.0,
-          fit: BoxFit.cover
-      );
+          fit: BoxFit.cover);
     }
-
   }
 
   _selectImageFromGallery() async {
@@ -188,19 +170,15 @@ class _ProductPageState extends State<ProductPage> {
   }
 
   _processImage(ImageSource source) async {
-      final pickedImage = await _picker.getImage(
-          source: source,
-          maxWidth: 800,
-          maxHeight: 600
-      );
+    final pickedImage =
+        await _picker.getImage(source: source, maxWidth: 800, maxHeight: 600);
 
-      if ( pickedImage != null ){
-        product.photoUrl = null;
-      }
+    if (pickedImage != null) {
+      product.photoUrl = null;
+    }
 
-      setState(() {
-        _pickedImage = pickedImage;
-      });
+    setState(() {
+      _pickedImage = pickedImage;
+    });
   }
-
 }

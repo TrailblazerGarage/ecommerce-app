@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-bool isNumeric( String input) {
-  if (input.isEmpty ) return false;
+bool isNumeric(String input) {
+  if (input.isEmpty) return false;
 
   final inputParsedAsNumber = num.tryParse(input);
-  return ( inputParsedAsNumber == null ) ? false : true;
+  return (inputParsedAsNumber == null) ? false : true;
 }
 
 void showAlert(BuildContext context, String message) {
   showDialog(
       context: context,
-      builder: ( context ) {
+      builder: (context) {
         return AlertDialog(
           title: Text('Information is not correct'),
           content: Text(message),
@@ -21,6 +21,5 @@ void showAlert(BuildContext context, String message) {
             )
           ],
         );
-      }
-  );
+      });
 }

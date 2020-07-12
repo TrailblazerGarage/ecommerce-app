@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = new UserPreferences();
   await prefs.initPrefs();
@@ -19,22 +18,18 @@ void main() async {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     return Provider(
       child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'Ecommerce App',
-        initialRoute: 'login',
-        routes: {
-          'login'     : ( BuildContext context ) => LoginPage(),
-          'register'  : ( BuildContext context ) => RegisterPage(),
-          'home'      : ( BuildContext context ) => HomePage(),
-          'product'    : ( BuildContext context ) => ProductPage(),
-        },
-        theme: ThemeData(
-          primaryColor: Colors.deepPurple
-        )
-      ),
+          debugShowCheckedModeBanner: false,
+          title: 'Ecommerce App',
+          initialRoute: 'login',
+          routes: {
+            'login': (BuildContext context) => LoginPage(),
+            'register': (BuildContext context) => RegisterPage(),
+            'home': (BuildContext context) => HomePage(),
+            'product': (BuildContext context) => ProductPage(),
+          },
+          theme: ThemeData(primaryColor: Colors.deepPurple)),
     );
   }
 }
