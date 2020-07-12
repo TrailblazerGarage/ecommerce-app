@@ -23,8 +23,9 @@ Firebase
   }
 }
 ```
-
-[ ] Run flutter format to have all code following Dart Format Standard
-[ ] Add screenshots of the app
-[ ] Create app doc
-[ ] Centralize all customized information like Firebase Realtime Database url
+- [ In Progress ] Fix all bugs found on QA phase
+- [ In Progress ] Improve app by add enhancements
+- [x] Run flutter format to have all code following Dart Format Standard
+- [x] Add screenshots of the app
+- [ ] Create app doc
+- [ ] Centralize all customized information like Firebase Realtime Database url
