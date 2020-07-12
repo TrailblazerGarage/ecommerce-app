@@ -16,7 +16,7 @@ class ProductService {
   final _prefs = new UserPreferences();
 
   Future<bool> addProduct( ProductModel product) async {
-    final url = '$_baseUrl/products.json';
+    final url = '$_baseUrl/products.json?auth=${ _prefs.token }';
 
     final resp = await http.post( url, body: productModelToJson(product) );
     return true;
@@ -59,7 +59,7 @@ class ProductService {
   }
 
   Future<int> removeProduct( String id ) async {
-    final url = '$_baseUrl/products/$id.json?auth${ _prefs.token }';
+    final url = '$_baseUrl/products/$id.json?auth=${ _prefs.token }';
     final resp = await http.delete(url);
 
     return 1;
